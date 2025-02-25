@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { hash } from 'argon2'
-
-import { Prisma, PrismaClient } from '../../../prisma/generated'
 
 const prisma = new PrismaClient({
 	transactionOptions: {
