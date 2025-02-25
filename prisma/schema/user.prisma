@@ -1,0 +1,20 @@
+model User {
+  id       Int    @id @default(autoincrement())
+  password String
+
+  email     String  @unique
+  name      String?
+  avatarUrl String? @map("avatar_url")
+
+  country String?
+
+  role Role @default(USER)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
