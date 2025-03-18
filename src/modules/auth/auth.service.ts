@@ -8,8 +8,6 @@ import { Role } from '@prisma/client'
 import { verify } from 'argon2'
 import { Response } from 'express'
 
-import { PrismaService } from '@/src/core/prisma/prisma.service'
-
 import { UserService } from '../user/user.service'
 
 import { AuthDto } from './dto/auth.dto'
@@ -20,13 +18,12 @@ export class AuthService {
 	REFRESH_TOKEN_NAME = 'refreshToken'
 
 	constructor(
-		private prisma: PrismaService,
 		private jwt: JwtService,
 		private userService: UserService
 		// private emailService: EmailService
 	) {}
 
-	async login(dto: AuthDto) {
+	public async login(dto: AuthDto) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...user } = await this.validateUser(dto)
 		const tokens = await this.issueTokens(user.id, user.role)
@@ -37,7 +34,7 @@ export class AuthService {
 		}
 	}
 
-	async register(dto: AuthDto) {
+	public async register(dto: AuthDto) {
 		const oldUser = await this.userService.findByEmail(dto.email)
 
 		if (oldUser) throw new BadRequestException('User already exists')
@@ -55,7 +52,7 @@ export class AuthService {
 		}
 	}
 
-	async getNewTokens(refreshToken: string) {
+	public async getNewTokens(refreshToken: string) {
 		const result = await this.jwt.verifyAsync(refreshToken)
 		if (!result) throw new UnauthorizedException('Invalid refresh token')
 

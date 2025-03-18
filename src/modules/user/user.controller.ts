@@ -21,31 +21,34 @@ export class UserController {
 
 	@Auth('ADMIN')
 	@Get()
-	async getList(@Query() params: PaginationArgsWithSearchTerm) {
+	public async getList(@Query() params: PaginationArgsWithSearchTerm) {
 		return this.userService.findAll(params)
 	}
 
 	@Auth('ADMIN')
 	@Get(':id')
-	async getById(@Param('id') id: string) {
+	public async getById(@Param('id') id: string) {
 		return this.userService.findById(+id)
 	}
 
 	@Auth('ADMIN')
 	@Post()
-	async createUser(@Body() createUserDto: CreateUserDto) {
+	public async createUser(@Body() createUserDto: CreateUserDto) {
 		return this.userService.create(createUserDto)
 	}
 
 	@Auth('ADMIN')
 	@Put(':id')
-	async updateUser(@Param('id') id: string, @Body() updateDto: UpdateUserDto) {
+	public async updateUser(
+		@Param('id') id: string,
+		@Body() updateDto: UpdateUserDto
+	) {
 		return this.userService.update(+id, updateDto)
 	}
 
 	@Auth('ADMIN')
 	@Delete(':id')
-	async deleteUser(@Param('id') id: string) {
+	public async deleteUser(@Param('id') id: string) {
 		return this.userService.delete(id)
 	}
 }

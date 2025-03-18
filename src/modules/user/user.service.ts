@@ -13,7 +13,7 @@ import { UserResponse } from './user.response'
 export class UserService {
 	constructor(private prisma: PrismaService) {}
 
-	async findById(id: number) {
+	public async findById(id: number) {
 		const user = await this.prisma.user.findUnique({
 			where: { id }
 		})
@@ -23,7 +23,7 @@ export class UserService {
 		return user
 	}
 
-	async findByEmail(email: string) {
+	public async findByEmail(email: string) {
 		return this.prisma.user.findUnique({
 			where: {
 				email
@@ -31,7 +31,9 @@ export class UserService {
 		})
 	}
 
-	async findAll(args?: PaginationArgsWithSearchTerm): Promise<UserResponse> {
+	public async findAll(
+		args?: PaginationArgsWithSearchTerm
+	): Promise<UserResponse> {
 		const searchTermQuery = args?.searchTerm
 			? this.getSearchTermFilter(args?.searchTerm)
 			: {}
@@ -51,7 +53,7 @@ export class UserService {
 		return { items: users, isHasMore }
 	}
 
-	async create({ password, ...dto }: CreateUserDto) {
+	public async create({ password, ...dto }: CreateUserDto) {
 		const user = {
 			...dto,
 			password: await hash(password)
@@ -62,7 +64,7 @@ export class UserService {
 		})
 	}
 
-	async update(id: number, { password, ...data }: UpdateUserDto) {
+	public async update(id: number, { password, ...data }: UpdateUserDto) {
 		await this.findById(id)
 
 		const hashedPassword = password
@@ -82,7 +84,7 @@ export class UserService {
 		})
 	}
 
-	async delete(id: string) {
+	public async delete(id: string) {
 		await this.findById(+id)
 
 		return this.prisma.user.delete({
