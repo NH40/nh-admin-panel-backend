@@ -8,6 +8,8 @@ import { Role } from '@prisma/client'
 import { verify } from 'argon2'
 import { Response } from 'express'
 
+import { EmailService } from '@/src/core/email/email.service'
+
 import { UserService } from '../user/user.service'
 
 import { AuthDto } from './dto/auth.dto'
@@ -19,8 +21,8 @@ export class AuthService {
 
 	constructor(
 		private jwt: JwtService,
-		private userService: UserService
-		// private emailService: EmailService
+		private userService: UserService,
+		private emailService: EmailService
 	) {}
 
 	public async login(dto: AuthDto) {
@@ -44,7 +46,7 @@ export class AuthService {
 
 		const tokens = await this.issueTokens(user.id, user.role)
 
-		// await this.emailService.sendWelcome(user.email)
+		await this.emailService.sendWelcome(user.email)
 
 		return {
 			user,

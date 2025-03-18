@@ -30,10 +30,7 @@ export class AuthController {
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('login')
-	public async login(
-		@Body() dto: AuthDto,
-		@Res({ passthrough: true }) res: Response
-	) {
+	async login(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
 		const { refreshToken, ...response } = await this.authService.login(dto)
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)
@@ -44,7 +41,7 @@ export class AuthController {
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('register')
-	public async register(
+	async register(
 		@Body() dto: AuthDto,
 		@Res({ passthrough: true }) res: Response
 	) {
@@ -55,7 +52,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('login/access-token')
-	public async getNewTokens(
+	async getNewTokens(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response
 	) {
@@ -78,14 +75,14 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post('logout')
-	public async logout(@Res({ passthrough: true }) res: Response) {
+	async logout(@Res({ passthrough: true }) res: Response) {
 		this.authService.removeRefreshTokenFromResponse(res)
 		return true
 	}
 
 	@Auth()
 	@Get('profile')
-	public async getProfile(@CurrentUser('id') id: number) {
+	async getProfile(@CurrentUser('id') id: number) {
 		return this.userService.findById(id)
 	}
 }
